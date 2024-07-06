@@ -1,54 +1,27 @@
 import { prisma } from "../src/db";
 
+const users = ["Austen", "Lauren", "Ed", "Rony", "YaoMing"];
+
 async function main() {
   // Delete all `User` and `Message` records
   await prisma.message.deleteMany({});
   await prisma.user.deleteMany({});
-  // (Re-)Create dummy `User` and `Message` records
-  await prisma.user.create({
-    data: {
-      name: "Jack",
-      messages: {
-        create: [
-          {
-            body: "A Note for Jack",
-          },
-          {
-            body: "Another note for Jack",
-          },
-        ],
+  users.forEach(async (name) => {
+    await prisma.user.create({
+      data: {
+        name: name,
+        messages: {
+          create: [
+            {
+              body: `A Note for ${name}`,
+            },
+            {
+              body: `Another note for ${name}`,
+            },
+          ],
+        },
       },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      name: "Ryan",
-      messages: {
-        create: [
-          {
-            body: "A Note for Ryan",
-          },
-          {
-            body: "Another note for Ryan",
-          },
-        ],
-      },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      name: "Adam",
-      messages: {
-        create: [
-          {
-            body: "A Note for Adam",
-          },
-          {
-            body: "Another note for Adam",
-          },
-        ],
-      },
-    },
+    });
   });
 }
 
